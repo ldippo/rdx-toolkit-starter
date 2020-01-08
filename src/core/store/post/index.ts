@@ -44,6 +44,7 @@ export const postSlice = createSlice({
   }
 });
 
+// TODO - break out into a service file and update codegen templates
 export const fetchPost = (id: number): AppThunk => async dispatch => {
   dispatch(postSlice.actions.getPostLoading({ id }));
 

@@ -1,3 +1,28 @@
+This is an opinionated starter project for rapidly prototyping strongly typed react applications with the following flavors:
+
+### State Management:
+
+- Primary Library: Redux
+- Side Effect Management: Redux Thunks
+- Implementation Helpers: Redux Toolkit
+
+### Testing Framework:
+
+- Test Runner: Jest
+- E2E Runner: Coming Soon
+
+### Utilities:
+
+- Codegen: Hygen Templating
+- Data Mocking: Faker
+
+### Additional Notes:
+
+- Try generating a complete slice for the redux store, including an api service via `yarn hygen store new`
+- Try installing the `Todo+` extension if you're using VSCode to leverage inline project management features in your editor
+
+## Begin Create React App Docs
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

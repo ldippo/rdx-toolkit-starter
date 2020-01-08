@@ -5,10 +5,18 @@ import { fetchPost } from "./core/store/post";
 export function StateBlock() {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-
+  const [inputVal, setInputVal] = React.useState(1);
   return (
     <>
-      <button onClick={() => dispatch(fetchPost(1))} children="get a post" />
+      <input
+        type="number"
+        value={inputVal}
+        onChange={e => setInputVal(Number(e.currentTarget.value))}
+      />
+      <button
+        onClick={() => dispatch(fetchPost(inputVal))}
+        children={`get post with id ${inputVal}`}
+      />
       <pre>{JSON.stringify(state, null, 4)}</pre>
     </>
   );

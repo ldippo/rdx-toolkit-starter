@@ -1,6 +1,6 @@
 import { postSlice } from "./index";
 import { store } from "../index";
-import { mockPost } from "./model";
+import { mockPost } from "./mocks";
 
 const id = 1;
 

@@ -1,4 +1,6 @@
-This is an opinionated starter project for rapidly prototyping strongly typed react applications with the following flavors:
+_This is a WIP opinionated starter project for rapidly prototyping strongly typed react applications._
+
+## Starter created with the following flavors:
 
 ### State Management:
 
@@ -20,8 +22,9 @@ This is an opinionated starter project for rapidly prototyping strongly typed re
 
 - Try generating a complete slice for the redux store, including an api service via `yarn hygen store new`
 - Try installing the `Todo+` extension if you're using VSCode to leverage inline project management features in your editor
+- No types for the API you're connecting to? Try getting started with [quicktype](https://quicktype.io)
 
-## Begin Create React App Docs
+_Here Begins Create React App Docs_
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

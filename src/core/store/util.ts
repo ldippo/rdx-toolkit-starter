@@ -16,12 +16,130 @@ interface DataMapperConfig {
   success: DataMapper;
   failure: DataMapper;
 }
-export const makeCrudEffectTriplets = <T>(
+export const makeCrudListEffectTriplets = <T>(
   name: string,
   initialState: NormalizedState<T>,
   dataMapperConfig?: DataMapperConfig
 ) => {
-  type State = NormalizedState<T>;
+  interface GetSuccessAction {
+    data: T[];
+  }
+
+  type DeleteSuccessAction = undefined;
+  interface FailureAction {
+    error: Error;
+  }
+  type LoadAction = undefined;
+
+  const GET_SUCCESS = `GET_ALL_${name}_Success`.toUpperCase();
+  const GET_FAILURE = `GET_ALL_${name}_Failure`.toUpperCase();
+  const GET_LOADING = `GET_ALL_${name}_Loading`.toUpperCase();
+
+  const getAllSuccess = createAction<GetSuccessAction>(GET_SUCCESS);
+  const getAllFailure = createAction<FailureAction>(GET_FAILURE);
+  const getAllLoading = createAction<LoadAction>(GET_LOADING);
+
+  const DELETE_SUCCESS = `DELETE_ALL_${name}_Success`.toUpperCase();
+  const DELETE_FAILURE = `DELETE_ALL_${name}_Failure`.toUpperCase();
+  const DELETE_LOADING = `DELETE_ALL_${name}_Loading`.toUpperCase();
+
+  const deleteAllSuccess = createAction<DeleteSuccessAction>(DELETE_SUCCESS);
+  const deleteAllFailure = createAction<FailureAction>(DELETE_FAILURE);
+  const deleteAllLoading = createAction<LoadAction>(DELETE_LOADING);
+
+  const actions = {
+    getAllSuccess,
+    getAllFailure,
+    getAllLoading,
+    deleteAllFailure,
+    deleteAllLoading,
+    deleteAllSuccess
+  };
+
+  const getReducer = (state: any, action: AnyAction) => {
+    const { data } = action.payload;
+    console.log("THE DATARS", data);
+    const normalizedData = data.reduce(
+      (acc: any, cur: { id: any }) => ({
+        ...acc,
+        [cur.id]: normalizeData(cur)
+      }),
+      {}
+    );
+    console.log("normalizer", normalizedData);
+    return {
+      error: null,
+      loading: false,
+      data: normalizedData
+    };
+  };
+  const deleteReducer = (state: any, action: AnyAction) => {
+    return {
+      error: null,
+      loading: false,
+      data: {}
+    };
+  };
+
+  const failReducer = (state: any, action: AnyAction) => {
+    const { id, err } = action.payload;
+    const existing = state.data;
+    const data = existing ? existing : null;
+    return {
+      loading: false,
+      error: err,
+      data
+    };
+  };
+
+  const loadReducer = (state: any, action: AnyAction) => {
+    const existing = state.data;
+    const error = existing ? existing.error : null;
+    const data = existing ? existing.data : null;
+
+    return {
+      error,
+      loading: true,
+      data
+    };
+  };
+
+  const slice = createSlice({
+    initialState,
+    name: `${name}`,
+    reducers: {
+      [getAllSuccess.type](state, action) {
+        return getReducer(state, action);
+      },
+      [getAllFailure.type](state, action) {
+        return failReducer(state, action);
+      },
+      [getAllLoading.type](state, action) {
+        return loadReducer(state, action);
+      },
+      [deleteAllSuccess.type](state, action) {
+        return deleteReducer(state, action);
+      },
+      [deleteAllFailure.type](state, action) {
+        return failReducer(state, action);
+      },
+      [deleteAllLoading.type](state, action) {
+        return loadReducer(state, action);
+      }
+    }
+  });
+
+  return {
+    actions,
+    slice
+  };
+};
+
+export const makeCrudItemEffectTriplets = <T>(
+  name: string,
+  initialState: NormalizedState<T>,
+  dataMapperConfig?: DataMapperConfig
+) => {
   interface GetSuccessAction {
     id: string | number;
     data: T;

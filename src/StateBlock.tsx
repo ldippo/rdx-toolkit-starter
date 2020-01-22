@@ -5,7 +5,7 @@ import {
   fetchAllPost,
   deletePost,
   updatePost
-} from "./core/store/post";
+} from "./core/store/post/effects";
 import { useTypedSelector } from "./core/store/util";
 
 export function StateBlock() {

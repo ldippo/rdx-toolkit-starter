@@ -3,9 +3,19 @@ import { ThunkAction } from "redux-thunk";
 import { RootState } from "./index";
 
 export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;
-export interface NormalizedData<T> {
+export interface NormalizedDataEntity<T> {
   data: T | null;
   id: string | number;
-  err: Error | null;
+  error: Error | null;
+  loading: boolean;
+}
+
+export interface NormalizedData<T> {
+  [id: string]: NormalizedDataEntity<T>;
+}
+
+export interface NormalizedState<T> {
+  data: NormalizedData<T>;
+  error: Error | null;
   loading: boolean;
 }

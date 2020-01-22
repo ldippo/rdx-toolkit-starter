@@ -1,4 +1,4 @@
-import { NormalizedData } from "../models";
+import { NormalizedDataEntity, NormalizedState } from "../models";
 
 export interface Post {
   userId: number;
@@ -7,8 +7,6 @@ export interface Post {
   body: string;
 }
 
-export type NormalizedPost = NormalizedData<Post>;
+export type NormalizedPost = NormalizedDataEntity<Post>;
 
-export interface PostState {
-  [key: string]: NormalizedPost;
-}
+export type PostState = NormalizedState<Post>;

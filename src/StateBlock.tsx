@@ -34,9 +34,10 @@ export function StateBlock() {
     dispatch(updatePost(inputVal, { title: inputVal2 }));
     const onButton5Click = () =>
     dispatch(deleteAllPost());
+
   return (
     <>
-      <input data-test-id="post id" type="number" value={inputVal} onChange={onInputChange} />
+      <input data-test-id="post id" type="text" value={inputVal} onChange={onInputChange} />
       <input data-test-id="update text" type="text" value={inputVal2} onChange={onInputChange2} />
       <button
       data-test-id="get"
@@ -47,7 +48,7 @@ export function StateBlock() {
       <button  data-test-id="update"  onClick={onButton4Click} children={`update post`} />
       <button  data-test-id="delete"  onClick={onButton3Click} children={`delete post`} />
       <button  data-test-id="delete all"  onClick={onButton5Click} children={`delete all posts`} />
-      <pre>{JSON.stringify(postState, null, 4)}</pre>
+      <pre data-test-id="state">{JSON.stringify(postState, null, 4)}</pre>
     </>
   );
 }

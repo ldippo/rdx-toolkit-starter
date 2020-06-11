@@ -50,20 +50,16 @@ export const updatePost = (
 export const deletePost = (id: number): AppThunk => async dispatch => {
   const { deleteLoading, deleteSuccess, deleteFailure } = postCrudSlice.actions;
 
-  dispatch(deleteLoading({ id }));
-
   const handleSuccess = (data: Post) => {
-    dispatch(deleteSuccess({ id, data }));
+    dispatch(deleteSuccess({ id }));
   };
-
-  const handleError = (error: Error) => dispatch(deleteFailure({ id, error }));
 
   await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
     method: "DELETE"
   })
     .then(p => p.json())
     .then(handleSuccess)
-    .catch(handleError);
+    .catch(handleSuccess);
 };
 
 export const fetchAllPost = (): AppThunk => async dispatch => {
@@ -84,7 +80,7 @@ export const fetchAllPost = (): AppThunk => async dispatch => {
     .catch(handleError);
 };
 
-export const deleteAllPost = (id: number): AppThunk => async dispatch => {
+export const deleteAllPost = (): AppThunk => async dispatch => {
   const {
     deleteAllLoading,
     deleteAllSuccess,

@@ -21,31 +21,31 @@ export const makeCrudListEffectTriplets = <T>(
   initialState: NormalizedState<T>,
   dataMapperConfig?: DataMapperConfig
 ) => {
-  interface GetSuccessAction {
+  interface GetSuccess {
     data: T[];
   }
 
-  type DeleteSuccessAction = undefined;
-  interface FailureAction {
+  type DeleteSuccess = undefined;
+  interface Failure {
     error: Error;
   }
-  type LoadAction = undefined;
+  type Load = undefined;
 
   const GET_SUCCESS = `GET_ALL_${name}_Success`.toUpperCase();
   const GET_FAILURE = `GET_ALL_${name}_Failure`.toUpperCase();
   const GET_LOADING = `GET_ALL_${name}_Loading`.toUpperCase();
 
-  const getAllSuccess = createAction<GetSuccessAction>(GET_SUCCESS);
-  const getAllFailure = createAction<FailureAction>(GET_FAILURE);
-  const getAllLoading = createAction<LoadAction>(GET_LOADING);
+  const getAllSuccess = createAction<GetSuccess>(GET_SUCCESS);
+  const getAllFailure = createAction<Failure>(GET_FAILURE);
+  const getAllLoading = createAction<Load>(GET_LOADING);
 
   const DELETE_SUCCESS = `DELETE_ALL_${name}_Success`.toUpperCase();
   const DELETE_FAILURE = `DELETE_ALL_${name}_Failure`.toUpperCase();
   const DELETE_LOADING = `DELETE_ALL_${name}_Loading`.toUpperCase();
 
-  const deleteAllSuccess = createAction<DeleteSuccessAction>(DELETE_SUCCESS);
-  const deleteAllFailure = createAction<FailureAction>(DELETE_FAILURE);
-  const deleteAllLoading = createAction<LoadAction>(DELETE_LOADING);
+  const deleteAllSuccess = createAction<DeleteSuccess>(DELETE_SUCCESS);
+  const deleteAllFailure = createAction<Failure>(DELETE_FAILURE);
+  const deleteAllLoading = createAction<Load>(DELETE_LOADING);
 
   const actions = {
     getAllSuccess,
@@ -82,7 +82,7 @@ export const makeCrudListEffectTriplets = <T>(
   };
 
   const failReducer = (state: any, action: AnyAction) => {
-    const { id, err } = action.payload;
+    const { err } = action.payload;
     const existing = state.data;
     const data = existing ? existing : null;
     return {
@@ -92,7 +92,7 @@ export const makeCrudListEffectTriplets = <T>(
     };
   };
 
-  const loadReducer = (state: any, action: AnyAction) => {
+  const loadReducer = (state: any, action: AnyAction): NormalizedState<T> => {
     const existing = state.data;
     const error = existing ? existing.error : null;
     const data = existing ? existing.data : null;
@@ -211,16 +211,12 @@ export const makeCrudItemEffectTriplets = <T>(
       }
     };
   };
+
   const deleteReducer = (state: any, action: AnyAction) => {
-    const { id, data } = action.payload;
-    return {
-      error: null,
-      loading: false,
-      data: {
-        ...state.data,
-        [id]: undefined
-      }
-    };
+    const { id } = action.payload;
+    
+    delete state.data[id];
+    return state
   };
 
   const updateReducer = (state: any, action: AnyAction) => {
@@ -244,6 +240,7 @@ export const makeCrudItemEffectTriplets = <T>(
       }
     };
   };
+
   const failReducer = (state: any, action: AnyAction) => {
     const { id, err } = action.payload;
     const existing = state.data[id];
@@ -264,7 +261,7 @@ export const makeCrudItemEffectTriplets = <T>(
 
   const loadReducer = (state: any, action: AnyAction) => {
     const { id } = action.payload;
-    const existing = state.data[id];
+    const existing = state.data;
     const error = existing ? existing.error : null;
     const data = existing ? existing.data : null;
 

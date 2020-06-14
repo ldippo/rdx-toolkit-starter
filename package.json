@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^4.8.0"
+    "cypress": "^4.8.0",
+    "cypress-composed": "ldippo/cypress-composed#master"
   }
 }

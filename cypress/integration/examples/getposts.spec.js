@@ -1,51 +1,39 @@
 /// <reference types="cypress" />
+import { Html } from 'cypress-composed'
+
+const { clickButton } = Html.Utility
+const { enterInput } = Html.InputCommands
+const { keyThroughSelect, selectSelect } = Html.SelectCommands
+
 
 function goHome() {
     cy.visit('localhost:3000')
 }
 
-function getElementFactory(tag) {
-    return (id) => {
-        return cy.get(`${tag}[data-test-id="${id}"]`)
-    }
-}
-
-const [getDiv, getButton, getInput, getH1, getP] = ['div', 'button', 'input', 'h1', 'p'].map(getElementFactory)
-
-function findAndClickButton(id) {
-    getButton(id).click();
-}
-
-function typeInInput(id, message) {
-    getInput(id)
-    .clear()
-    .type(message)
-}
-
 function getAllPosts() {
     goHome()
-    findAndClickButton('get all')
+    clickButton('get all')
 }
 
 function deleteAllPosts() {
-    findAndClickButton('delete all')
+    clickButton('delete all')
 }
 
 function getPostFromInput(id) {
-    typeInInput('post id', id)
-    findAndClickButton('get')
+    enterInput('post id', id)
+    clickButton('get')
 }
 
 function updatePostFromInput(id, message) {
     getPostFromInput(id)
     cy.wait(500)
-    typeInInput('update text', message);
-    findAndClickButton('update')
+    enterInput('update text', message);
+    clickButton('update')
 } 
 
 function deleteAPostFromInput(id) {
-    typeInInput('post id', id);
-    findAndClickButton('delete');
+    enterInput('post id', id);
+    clickButton('delete');
 }
 
 function playWithAllCrudButtons() {
@@ -63,26 +51,38 @@ function playWithAllCrudButtons() {
 }
 
 function getStateContent() {
-    return cy.get('pre[data-test-id="state"]');
+    return cy.get('pre[data-test-id="selected post"]');
 }
 
 function contentShouldHaveInnerText(text) {
     const stateContent = getStateContent()
-    console.log(stateContent)
     stateContent.contains(text)
 }
 
+function updateStateWithKeydown () {
+    goHome()
+    getAllPosts()
+    keyThroughSelect('post select', 20)
+}
+
+function canGetAndSelectAPost(postNum) {
+    goHome()
+    getPostFromInput(postNum)
+    selectSelect('post select', `${postNum}`)
+}
+
+function getAndSelectAPostAndEnsureVisible() {
+    canGetAndSelectAPost(33)
+    contentShouldHaveInnerText("\"id\": 33")
+}
 context('Actions', () => {
-    
     it('can get all posts', getAllPosts)
     it('can delete all posts', deleteAllPosts)
-    it('can get one post', () => {
-        getPostFromInput(33)
-        contentShouldHaveInnerText("\"id\": 33")
-    });
-    it('can update post', () => {
+    it('can get one post, select it, have its content visible', getAndSelectAPostAndEnsureVisible);
+    it('keydown updates state', updateStateWithKeydown)
+    it('can engage with all crud actions', playWithAllCrudButtons)
+    it.skip('can update post', () => {
         updatePostFromInput(54, 'this is your new post')
     })
-    it('can engage with all crud actions', playWithAllCrudButtons)
 })
   

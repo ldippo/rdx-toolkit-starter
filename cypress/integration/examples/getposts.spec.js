@@ -45,7 +45,7 @@ function playWithAllCrudButtons() {
     cy.wait(500)
     getPostFromInput(4);
     cy.wait(500)
-    updatePostFromInput(5, 'hello govna');
+    updatePostFromInput(5, 'hello world');
     cy.wait(500)
     deleteAPostFromInput(4);
 }
